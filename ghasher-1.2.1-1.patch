@@ -1,0 +1,124 @@
+diff -urN -x .build -x .inst -x .sinst -x configure -x Makefile.in -x 'aclocal.m4*' -x ltmain.sh -x 'config.*' -x depcomp -x install-sh -x missing -x mkinstalldirs -x autom4te.cache ghasher-1.2.1-orig/CYGWIN-PATCHES/README ghasher-1.2.1/CYGWIN-PATCHES/README
+--- ghasher-1.2.1-orig/CYGWIN-PATCHES/README	1969-12-31 18:00:00.000000000 -0600
++++ ghasher-1.2.1/CYGWIN-PATCHES/README	2005-11-23 19:12:18.039875000 -0600
+@@ -0,0 +1,90 @@
++ghasher
++-------------------------------------------
++ghasher can easily show the MD5 sum (or md2, md4, sha1, 
++sha, ripemd160, dss1) of a file.
++
++Runtime requirements:
++  cygwin-1.5.18-1
++  atk-runtime-1.9.1-1
++  expat-1.95.8-1
++  glib2-runtime-2.6.5-1
++  gtk2-x11-runtime-2.6.8-1
++  libXft2-2.1.6-1
++  libfontconfig1-2.2.2-1
++  libfreetype26-2.1.9-1
++  libglade2-2.5.1-1
++  libiconv2-1.9.2-2
++  libintl3-0.14.5-1
++  libxml2-2.6.22-1
++  openssl-0.9.8a-1
++  pango-runtime-1.8.1-1
++  xorg-x11-bin-dlls-6.8.2.0-1
++  zlib-1.2.3-1
++
++Build requirements:
++  cygwin-1.5.18-1
++  binutils-20050610-1
++  gawk-3.1.5-2
++  gcc-core-3.4.4-1
++  make-3.80-1
++  pkgconfig-0.17.2-2
++  sed-4.1.4-1
++
++  atk-devel-1.9.1-1
++  expat-1.95.8-1
++  gettext-0.14.5-1
++  glib2-devel-2.6.5-1
++  gtk2-x11-devel-2.6.8-1
++  libXft-devel-2.1.6-1
++  libfontconfig-devel-2.2.2-1
++  libfreetype2-devel-2.1.9-1
++  libglade2-2.5.1-1
++  libiconv-1.9.2-2
++  openssl-devel-0.9.8a-1
++  pango-devel-1.8.1-1
++  xorg-x11-devel-6.8.2.0-1
++  zlib-1.2.3-1
++
++Canonical homepage:
++  http://asgaard.homelinux.org/code/ghasher/
++
++-------------------------------------------
++
++Build instructions:
++  unpack ghasher-1.2.1-1-src.tar.bz2
++    if you use setup to install this src package, it will be
++	 unpacked under /usr/src automatically
++  cd /usr/src
++  ./ghasher-1.2.1-1.sh all
++
++This will create:
++  /usr/src/ghasher-1.2.1-1-src.tar.bz2
++  /usr/src/ghasher-1.2.1-1.tar.bz2
++
++-------------------------------------------
++
++Files included in the binary package:
++
++  /usr/bin/ghasher.exe
++  /usr/share/applications/utelsystems-ghasher.desktop
++  /usr/share/doc/Cygwin/ghasher-1.2.1.README
++  /usr/share/doc/ghasher-1.2.1/AUTHORS
++  /usr/share/doc/ghasher-1.2.1/LICENSE
++  /usr/share/doc/ghasher-1.2.1/NEWS
++  /usr/share/doc/ghasher-1.2.1/README
++  /usr/share/doc/ghasher-1.2.1/TODO
++  /usr/share/pixmaps/hash.xpm
++
++------------------
++
++Port Notes:
++
++----- version 1.2.1-1 -----
++Version bump to include largefile support.
++
++----- version 1.2.0-1 -----
++Initial release for Cygwin.
++
++
++Cygwin port maintained by:
++http://cygwinports.dotsrc.org/
+diff -urN -x .build -x .inst -x .sinst -x configure -x Makefile.in -x 'aclocal.m4*' -x ltmain.sh -x 'config.*' -x depcomp -x install-sh -x missing -x mkinstalldirs -x autom4te.cache ghasher-1.2.1-orig/CYGWIN-PATCHES/setup.hint ghasher-1.2.1/CYGWIN-PATCHES/setup.hint
+--- ghasher-1.2.1-orig/CYGWIN-PATCHES/setup.hint	1969-12-31 18:00:00.000000000 -0600
++++ ghasher-1.2.1/CYGWIN-PATCHES/setup.hint	2005-11-23 19:12:18.039875000 -0600
+@@ -0,0 +1,5 @@
++category: Gnome
++requires: cygwin gtk2-x11-runtime libglade2 openssl
++sdesc: "GTK2 md5sum utility"
++ldesc: "ghasher can easily show the md5 sum (or md2, md4, sha1,
++sha, ripemd160, dss1) of a file."
+diff -urN -x .build -x .inst -x .sinst -x configure -x Makefile.in -x 'aclocal.m4*' -x ltmain.sh -x 'config.*' -x depcomp -x install-sh -x missing -x mkinstalldirs -x autom4te.cache ghasher-1.2.1-orig/Makefile ghasher-1.2.1/Makefile
+--- ghasher-1.2.1-orig/Makefile	2005-11-22 11:24:41.000000000 -0600
++++ ghasher-1.2.1/Makefile	2005-11-23 19:05:27.508625000 -0600
+@@ -24,10 +24,13 @@
+ .PHONY: install clean
+ 
+ install: ghasher
+-	install -c -o root ./ghasher ${BINDIR}/ghasher
+-	install -c -m 444 -o root ghasher.desktop ${DESKTOPFILEDIR}/utelsystems-ghasher.desktop
+-	install -c -m 444 -o root hash.xpm ${PIXMAPDIR}/hash.xpm
++	mkdir -p $(DESTDIR)$(BINDIR)
++	mkdir -p $(DESTDIR)$(DESKTOPFILEDIR)
++	mkdir -p $(DESTDIR)$(PIXMAPDIR)
++	install -c ./ghasher $(DESTDIR)${BINDIR}/ghasher
++	install -c -m 444 ghasher.desktop $(DESTDIR)${DESKTOPFILEDIR}/utelsystems-ghasher.desktop
++	install -c -m 444 hash.xpm $(DESTDIR)${PIXMAPDIR}/hash.xpm
+ 
+ clean:
+-	rm -f  *.o ghasher ghasher-glade.c text2cstring
++	rm -f  *.o ghasher ghasher-glade.c text2cstring *.exe
+ 

@@ -1,0 +1,5 @@
+category: Gnome
+requires: cygwin gtk2-x11-runtime libglade2 openssl
+sdesc: "GTK2 md5sum utility"
+ldesc: "ghasher can easily show the md5 sum (or md2, md4, sha1,
+sha, ripemd160, dss1) of a file."
